@@ -6,7 +6,7 @@
     "examples/*"
   ],
   "repository": "https://github.com/toio/toio.js",
-  "author": "Sony Interactive Entertainment Inc.",
+  "author": "Keisuke Okumura",
   "license": "MIT",
   "scripts": {
     "bootstrap": "lerna bootstrap",
@@ -39,5 +39,11 @@
     "rimraf": "^2.6.3",
     "typedoc": "^0.16.9",
     "typedoc-plugin-lerna-packages": "^0.1.5"
+  },
+  "dependencies": {
+    "argparse": "^2.0.1",
+    "pino": "^7.6.5",
+    "pino-pretty": "^7.5.1",
+    "socket.io-client": "^4.4.1"
   }
 }
