@@ -1,86 +1,46 @@
-# toio.js@Raspberry Pi
+toio edge controller
+---
 
-Library for controlling toio&trade;Core Cube using Node.js.
+An edge controller working on raspberry pi to control [toio](https://toio.io/) robots, which receives instructions via [socket.io](https://socket.io/).
+This repo is based on [@Kei18/toio.js-raspi](https://github.com/Kei18/toio.js-raspi) and used in robot demos of [SSSP](https://kei18.github.io/sssp), together with [toio-mrmp](https://github.com/Kei18/toio-mrmp).
 
-## :computer: Getting Started
-
-### Prerequisites
-
-- **Node.js** >= 10
-- This library depends on [@abandonware/noble](https://github.com/abandonware/noble).
-  - As far as I confirmed, additional libraries are not required.
-
-### Installation
-
-Install toio.js using `yarn`.
-If `yarn` command is not existed, type `npm install -g yarn` to install.
-
-```bash
-yarn install
-yarn build
-```
-
-### Usage
-
-Here is a quick example to get you started.
-
-```js
-const { NearestScanner } = require('@toio/scanner')
-
-async function main() {
-  // start a scanner to find the nearest cube
-  const cube = await new NearestScanner().start()
-
-  // connect to the cube
-  await cube.connect()
-
-  // move the cube
-  cube.move(100, 100, 1000)
-  //         |    |     `--- duration [ms]
-  //         |    `--------- right motor speed
-  //         `-------------- left motor speed
-}
-
-main()
-```
-
-## :memo: Documentation
-
-- [API reference document](https://toio.github.io/toio.js/)
-- [toio&trade;Core Cube technical specification](https://toio.github.io/toio-spec/)
-
-## :white_check_mark: Verified Environment
-
-### Linux
-
-Raspbian GNU/Linux 9.11 on Model B+
-
-## :package: Packages
-
-| Package name  | Readme                                 | Description          |
-| ------------- | -------------------------------------- | -------------------- |
-| @toio/scanner | [packages/scanner](./packages/scanner) | Cube scanner         |
-| @toio/cube    | [packages/cube](./packages/cube)       | Cube BLE API wrapper |
-
-## :video_game: Example
-
-### How to play sample application
+## Setup
 
 ```sh
-sudo yarn example:<name of example>                  # start sample application (see below)
+sudo bash ./install.sh
 ```
 
-**Do not forget `sudo`**
+## Start edge controller
+```sh
+sudo node ./src/edge_controller.js --addr={YOUR HOST PC}.local -k 1  # number of robots
+```
 
-### List of sample application
+You can find details for parameters with:
 
-| Name & Source                                   | Command                         | #cubes | Mat | Description                     |
-| ----------------------------------------------- | ------------------------------- | ------ | --- | ------------------------------- |
-| [id-reader](./examples/id-reader)               | `yarn example:id-reader`        | 1      | Yes | read & show toio ID information |
-| [keyboard-control](./examples/keyboard-control) | `yarn example:keyboard-control` | 1      | No  | move a cube with ↑↓←→           |
-| [chase](./examples/chase)                       | `yarn example:chase`            | 2      | Yes | a cube chase another one        |
+```sh
+sudo node ./src/edge_controller.js --help
+```
 
+## Send instruction
 
-## Note
+Instruction takes the form of JSON that includes:
 
-- This repo is for research use
+- `agent` index of connected toio robots, starting from 0
+- `operation` that specifies which function performs
+- `parmas`, a list consisting of arguments of `operation`
+
+For example, `cube.move(100, 100, 1000)` in [toio.js](https://github.com/toio/toio.js/) should be sent as follows:
+
+```json
+{
+    agent: 0,
+    operation: "move",
+    params: [100, 100, 1000]
+}
+```
+
+## Licence
+This software is released under the MIT License, see [LICENSE.txt](LICENCE.txt).
+
+## Author
+[Keisuke Okumura](https://kei18.github.io) is a Ph.D. student at the Tokyo Institute of Technology, interested in controlling multiple moving agents.

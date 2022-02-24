@@ -1,11 +1,10 @@
-// client
+// client server
 const { NearScanner } = require('@toio/scanner');
 const { io } = require("socket.io-client");
 const { ArgumentParser } = require("argparse");
 const { sleep, getLogger } = require("./utils");
 
 const logger = getLogger();
-
 const parser = new ArgumentParser({});
 parser.add_argument('-k', '--agents', {help: "number of agents", default: 1});
 parser.add_argument('-a', '--addr', {default: "localhost"});
@@ -13,6 +12,7 @@ parser.add_argument('-p', '--port', {help: "port (as client)", default: 3000});
 const args = parser.parse_args();
 
 const toioSetup = async (num_agents) => {
+  // conenct to toio robots
   let cubes = await new NearScanner(num_agents).start();
   cubes.sort(function(a, b) { return (a.id < b.id) ? 1 : -1; });
   for (let i = 0; i < cubes.length; ++i) await cubes[i].connect();

@@ -1,11 +1,8 @@
-const fs = require('fs');
 const pino = require('pino');
 
 const sleep = async (ms) => {
   return new Promise(r => setTimeout(r, ms));
 };
-
-const isempty = (arr) => { return arr.length == 0; };
 
 const getLogger = () => {
   return pino({
@@ -22,6 +19,5 @@ const getLogger = () => {
 
 module.exports = {
   sleep,
-  isempty,
   getLogger,
 };
